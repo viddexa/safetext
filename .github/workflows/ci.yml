@@ -16,28 +16,44 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
+    - name: Install uv
+      uses: astral-sh/setup-uv@v5
       with:
-        python-version: ${{ matrix.python-version }}
+        enable-cache: true
+
+    - name: Set up Python ${{ matrix.python-version }}
+      run: uv python install ${{ matrix.python-version }}
 
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install -e ".[dev]"
-        pip install build
+        uv sync --extra dev
+        uv pip install build
 
     - name: Lint with ruff
+      id: ruff-check
       run: |
-        ruff check .
-        ruff format --check .
+        echo "::group::Ruff Check"
+        if ! uv run ruff check .; then
+          echo "::error::Ruff check failed. Please run 'ruff check --fix .' locally to fix issues."
+          echo "::notice::See contributing guidelines at https://github.com/safevideo/safetext/blob/main/CONTRIBUTING.md"
+          exit 1
+        fi
+        echo "::endgroup::"
+        
+        echo "::group::Ruff Format"
+        if ! uv run ruff format --check .; then
+          echo "::error::Ruff format check failed. Please run 'ruff format .' locally to fix formatting."
+          echo "::notice::See contributing guidelines at https://github.com/safevideo/safetext/blob/main/CONTRIBUTING.md"
+          exit 1
+        fi
+        echo "::endgroup::"
 
     - name: Run tests
       run: |
-        pytest -v --cov=safetext --cov-report=term-missing
+        uv run pytest -v --cov=safetext --cov-report=term-missing -n auto
 
     - name: Test package installation
       run: |
-        python -m build
-        pip install dist/*.whl
-        python -c "from safetext import SafeText; st = SafeText('en'); print('Package imported successfully')"
+        uv run python -m build
+        uv pip install --no-deps dist/*.whl
+        uv run python -c "from safetext import SafeText; st = SafeText('en'); print('Package imported successfully')"

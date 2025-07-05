@@ -17,22 +17,24 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
+    - name: Install uv
+      uses: astral-sh/setup-uv@v5
       with:
-        python-version: ${{ matrix.python-version }}
+        enable-cache: true
+
+    - name: Set up Python ${{ matrix.python-version }}
+      run: uv python install ${{ matrix.python-version }}
 
     - name: Test PyPI package installation
       run: |
-        python -m pip install --upgrade pip
-        pip install safetext
-        python -c "from safetext import SafeText; st = SafeText('en'); result = st.check_profanity('test shit'); print(f'Profanity detection working: {result}')"
+        uv pip install safetext
+        uv run python -c "from safetext import SafeText; st = SafeText('en'); result = st.check_profanity('test shit'); print(f'Profanity detection working: {result}')"
 
     - name: Test development installation
       run: |
-        pip uninstall -y safetext
-        pip install -e ".[dev]"
-        pytest -v
+        uv pip uninstall safetext
+        uv sync --extra dev
+        uv run pytest -v -n auto
 
     - name: Test all language support
       run: |
@@ -47,11 +49,11 @@ jobs:
                 print(f'✗ {lang} failed: {e}')
                 exit(1)
         EOF
-        python test_languages.py
+        uv run python test_languages.py
 
     - name: Check for dependency conflicts
       run: |
-        pip check
+        uv pip check
 
     - name: Report status
       if: failure()
