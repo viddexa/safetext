@@ -49,6 +49,18 @@ pip install safetext
 "Some text with ***."
 ```
 
+### using whitelist
+
+exclude specific words from profanity detection:
+
+```python
+# Using a list of words
+>>> st = SafeText(language='en', whitelist=['word1', 'word2'])
+
+# Using a file (one word per line)
+>>> st = SafeText(language='en', whitelist='path/to/whitelist.txt')
+```
+
 ### automated language detection
 
 - from text:
