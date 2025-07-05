@@ -16,12 +16,13 @@
 
 ## 🤔 why safetext?
 
-**Detect. Filter. Protect.**
+**Fast profanity detection and filtering for 13 languages.**
 
-- **Effortless Profanity Management**: Instantly identify and censor profanity with just one line of code.
-- **Multilingual Capability**: Fluent in five languages, designed for easy expansion.
-- **Optimized for Content Moderation**: Perfect for efficiently moderating and cleaning up text in various applications.
-- **Automated**: Smart language detection for quick setup.
+- **Multi-format Detection**: Single words, phrases, and contextual profanity
+- **Whitelisting**: Exclude specific words from detection
+- **Auto Language Detection**: From text or subtitle files
+- **Precise Filtering**: Exact position tracking and custom censoring
+- **Simple Integration**: One-line setup with clean API
 
 ## 📦 installation
 
