@@ -27,7 +27,8 @@ def available_languages() -> List[Language]:
             available_lang_codes.append(item)
 
     available_langs = []
-    for lang in Language:
+    # Use Language.all() instead of iterating directly over Language
+    for lang in Language.all():
         if lang.iso_code_639_1.name.lower() in available_lang_codes:  # Correctly access the ISO 639-1 code
             available_langs.append(lang)
 
@@ -74,4 +75,4 @@ def detect_language_from_srt(srt_file: str, use_first_n_subs: 10) -> str:
     subs = pysrt.open(srt_file, encoding="utf-8")
     text = " ".join([sub.text_without_tags.replace("\n", " ") for sub in subs[:use_first_n_subs]])
 
-    return detect_language_from_text(text)
+    return detect_language_from_text(te
