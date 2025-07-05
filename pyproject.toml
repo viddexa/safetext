@@ -1,0 +1,122 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "safetext"
+dynamic = ["version"]
+authors = [{name = "Viddexa AI"}]
+description = "Fast profanity filtering tool for multiple languages"
+readme = "README.md"
+license = {file = "LICENSE"}
+requires-python = ">=3.10"
+keywords = [
+    "text", "profanity", "filtering", "moderation", 
+    "turkish", "english", "spanish", "arabic", "hindi", "chinese",
+    "portuguese", "russian", "french", "german", "japanese",
+    "persian", "azerbaijani"
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Education",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "lingua-language-detector==2.1.1",
+    "pysrt",
+    "requests",
+    "python-dotenv",
+]
+
+[project.urls]
+Homepage = "https://github.com/viddexa/safetext"
+"Source" = "https://github.com/viddexa/safetext"
+Issues = "https://github.com/viddexa/safetext/discussions/categories/q-a"
+"Changelog" = "https://github.com/viddexa/safetext/releases"
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.1.0",
+    "pytest>=6.0",
+    "pytest-cov>=2.0",
+    "pytest-xdist>=3.0",
+    "twine>=4.0.0",
+    "build>=0.10.0",
+]
+tests = [
+    "pytest>=6.0",
+    "pytest-cov>=2.0",
+]
+
+[tool.setuptools]
+# Use find_namespace_packages to include all subpackages
+packages = {find = {where = ["."], include = ["safetext*"]}}
+include-package-data = true
+
+[tool.setuptools.dynamic]
+version = {attr = "safetext.__version__"}
+
+[tool.setuptools.package-data]
+# Include all words.txt files in language directories
+safetext = [
+    "languages/*/words.txt",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_functions = ["test_*"]
+python_classes = ["Test*"]
+addopts = "-v --tb=short"
+
+[tool.ruff]
+line-length = 110
+target-version = "py38"
+exclude = [
+    ".tox",
+    "*.egg",
+    "build",
+    "dist",
+    "temp",
+    ".git",
+    ".vscode",
+    "__pycache__",
+    "venv",
+    ".venv",
+]
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "B",  # flake8-bugbear
+    "C4", # flake8-comprehensions
+    "UP", # pyupgrade
+]
+ignore = [
+    "F401", # module imported but unused
+    "E731", # do not assign a lambda expression, use a def
+    "E402", # module level import not at top of file
+    "E501", # line too long - let black handle this
+]
+
+[tool.ruff.format]
+# Use black-compatible formatting
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"

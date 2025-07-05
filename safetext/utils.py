@@ -27,7 +27,8 @@ def available_languages() -> List[Language]:
             available_lang_codes.append(item)
 
     available_langs = []
-    for lang in Language:
+    # Use Language.all() instead of iterating directly over Language
+    for lang in Language.all():
         if lang.iso_code_639_1.name.lower() in available_lang_codes:  # Correctly access the ISO 639-1 code
             available_langs.append(lang)
 

@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.10', '3.11', '3.12', '3.13']
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v5
+      with:
+        enable-cache: true
+
+    - name: Set up Python ${{ matrix.python-version }}
+      run: uv python install ${{ matrix.python-version }}
+
+    - name: Install dependencies
+      run: uv sync --extra dev
+
+    - name: Lint with ruff
+      id: ruff-check
+      run: |
+        source .venv/bin/activate
+        
+        echo "::group::Ruff Check"
+        if ! ruff check .; then
+          echo "::error::Ruff check failed. Please run 'ruff check --fix .' locally to fix issues."
+          echo "::notice::See contributing guidelines at https://github.com/viddexa/safetext/blob/main/CONTRIBUTING.md"
+          exit 1
+        fi
+        echo "::endgroup::"
+        
+        echo "::group::Ruff Format"
+        if ! ruff format --check .; then
+          echo "::error::Ruff format check failed. Please run 'ruff format .' locally to fix formatting."
+          echo "::notice::See contributing guidelines at https://github.com/viddexa/safetext/blob/main/CONTRIBUTING.md"
+          exit 1
+        fi
+        echo "::endgroup::"
+
+    - name: Run tests
+      run: |
+        source .venv/bin/activate
+        pytest -v --cov=safetext --cov-report=term-missing -n auto
+
+    - name: Test package installation
+      run: |
+        source .venv/bin/activate
+        python -m build
+        pip install --no-deps dist/*.whl
+        python -c "from safetext import SafeText; st = SafeText('en'); print('Package imported successfully')"

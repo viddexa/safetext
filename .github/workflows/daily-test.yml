@@ -1,0 +1,95 @@
+name: Daily Package Test
+
+on:
+  schedule:
+    # Runs at 08:00 UTC every day
+    - cron: '0 8 * * *'
+  workflow_dispatch:  # Allow manual triggering
+
+jobs:
+  test-install:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: ['3.10', '3.11', '3.12', '3.13']
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v5
+      with:
+        enable-cache: true
+
+    - name: Set up Python ${{ matrix.python-version }}
+      run: uv python install ${{ matrix.python-version }}
+
+    - name: Test PyPI package installation
+      shell: bash
+      run: |
+        python -m venv test-env
+        if [[ "$RUNNER_OS" == "Windows" ]]; then
+          source test-env/Scripts/activate
+        else
+          source test-env/bin/activate
+        fi
+        pip install safetext
+        python -c "from safetext import SafeText; st = SafeText('en'); result = st.check_profanity('test shit'); print(f'Profanity detection working: {result}')"
+
+    - name: Test development installation
+      shell: bash
+      run: |
+        uv sync --extra dev
+        if [[ "$RUNNER_OS" == "Windows" ]]; then
+          source .venv/Scripts/activate
+        else
+          source .venv/bin/activate
+        fi
+        pytest -v -n auto
+
+    - name: Test all language support
+      shell: bash
+      run: |
+        if [[ "$RUNNER_OS" == "Windows" ]]; then
+          source .venv/Scripts/activate
+        else
+          source .venv/bin/activate
+        fi
+        cat > test_languages.py << 'EOF'
+        from safetext import SafeText
+        languages = ['ar', 'az', 'de', 'en', 'es', 'fa', 'fr', 'hi', 'ja', 'pt', 'ru', 'tr', 'zh']
+        for lang in languages:
+            try:
+                st = SafeText(lang)
+                print(f'✓ {lang} loaded successfully')
+            except Exception as e:
+                print(f'✗ {lang} failed: {e}')
+                exit(1)
+        EOF
+        python test_languages.py
+
+    - name: Check for dependency conflicts
+      shell: bash
+      run: |
+        if [[ "$RUNNER_OS" == "Windows" ]]; then
+          source .venv/Scripts/activate
+        else
+          source .venv/bin/activate
+        fi
+        pip check
+
+    - name: Report status
+      if: failure()
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const os = '${{ matrix.os }}';
+          const python = '${{ matrix.python-version }}';
+          github.rest.issues.create({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            title: `Daily test failed on ${os} Python ${python}`,
+            body: `The daily package test failed. Please check the [workflow run](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}).`,
+            labels: ['ci-failure', 'automated']
+          })
