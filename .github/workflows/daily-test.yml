@@ -27,17 +27,22 @@ jobs:
 
     - name: Test PyPI package installation
       run: |
-        uv pip install safetext
-        uv run python -c "from safetext import SafeText; st = SafeText('en'); result = st.check_profanity('test shit'); print(f'Profanity detection working: {result}')"
+        uv venv test-env
+        source test-env/bin/activate
+        pip install safetext
+        python -c "from safetext import SafeText; st = SafeText('en'); result = st.check_profanity('test shit'); print(f'Profanity detection working: {result}')"
+        deactivate
+        rm -rf test-env
 
     - name: Test development installation
       run: |
-        uv pip uninstall safetext
         uv sync --extra dev
-        uv run pytest -v -n auto
+        source .venv/bin/activate
+        pytest -v -n auto
 
     - name: Test all language support
       run: |
+        source .venv/bin/activate
         cat > test_languages.py << 'EOF'
         from safetext import SafeText
         languages = ['ar', 'az', 'de', 'en', 'es', 'fa', 'fr', 'hi', 'ja', 'pt', 'ru', 'tr', 'zh']
@@ -49,11 +54,12 @@ jobs:
                 print(f'✗ {lang} failed: {e}')
                 exit(1)
         EOF
-        uv run python test_languages.py
+        python test_languages.py
 
     - name: Check for dependency conflicts
       run: |
-        uv pip check
+        source .venv/bin/activate
+        pip check
 
     - name: Report status
       if: failure()

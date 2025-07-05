@@ -27,13 +27,13 @@ jobs:
     - name: Install dependencies
       run: |
         uv sync --extra dev
-        uv pip install build
 
     - name: Lint with ruff
       id: ruff-check
       run: |
+        source .venv/bin/activate
         echo "::group::Ruff Check"
-        if ! uv run ruff check .; then
+        if ! ruff check .; then
           echo "::error::Ruff check failed. Please run 'ruff check --fix .' locally to fix issues."
           echo "::notice::See contributing guidelines at https://github.com/safevideo/safetext/blob/main/CONTRIBUTING.md"
           exit 1
@@ -41,7 +41,7 @@ jobs:
         echo "::endgroup::"
         
         echo "::group::Ruff Format"
-        if ! uv run ruff format --check .; then
+        if ! ruff format --check .; then
           echo "::error::Ruff format check failed. Please run 'ruff format .' locally to fix formatting."
           echo "::notice::See contributing guidelines at https://github.com/safevideo/safetext/blob/main/CONTRIBUTING.md"
           exit 1
@@ -50,10 +50,12 @@ jobs:
 
     - name: Run tests
       run: |
-        uv run pytest -v --cov=safetext --cov-report=term-missing -n auto
+        source .venv/bin/activate
+        pytest -v --cov=safetext --cov-report=term-missing -n auto
 
     - name: Test package installation
       run: |
-        uv run python -m build
-        uv pip install --no-deps dist/*.whl
-        uv run python -c "from safetext import SafeText; st = SafeText('en'); print('Package imported successfully')"
+        source .venv/bin/activate
+        python -m build
+        pip install --no-deps dist/*.whl
+        python -c "from safetext import SafeText; st = SafeText('en'); print('Package imported successfully')"

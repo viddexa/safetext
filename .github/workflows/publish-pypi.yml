@@ -21,11 +21,15 @@ jobs:
       
     - name: Build package
       run: |
-        uv pip install build twine
-        uv run python -m build
+        uv sync
+        source .venv/bin/activate
+        pip install build twine
+        python -m build
         
     - name: Publish to PyPI
       env:
         TWINE_USERNAME: __token__
         TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
-      run: uv run twine upload --verbose --skip-existing dist/*
+      run: |
+        source .venv/bin/activate
+        twine upload --verbose --skip-existing dist/*
