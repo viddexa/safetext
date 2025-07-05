@@ -8,7 +8,8 @@ dynamic = ["version"]
 authors = [{name = "Viddexa AI"}]
 description = "Fast profanity filtering tool for multiple languages"
 readme = "README.md"
-license = {file = "LICENSE"}
+license = "MIT"
+license-files = ["LICENSE"]
 requires-python = ">=3.10"
 keywords = [
     "text", "profanity", "filtering", "moderation", 
@@ -26,7 +27,6 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
-    "License :: OSI Approved :: MIT License",
     "Topic :: Software Development :: Libraries",
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Education",
