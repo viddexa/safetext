@@ -15,7 +15,12 @@ class SafeText:
     optionally validating the results against the ModerateContentAPI.
     """
 
-    def __init__(self, language: str = "en", validate_profanity: bool = False, whitelist: Optional[Union[List[str], str]] = None):
+    def __init__(
+        self,
+        language: str = "en",
+        validate_profanity: bool = False,
+        whitelist: Optional[Union[List[str], str]] = None,
+    ):
         """
         Initializes the SafeText with a specified language and validation option.
 
@@ -27,13 +32,14 @@ class SafeText:
         """
         self.language = language
         self.checker = None
-        self.moderate_content_api_key = os.getenv('MODERATE_CONTENT_API_KEY')
+        self.moderate_content_api_key = os.getenv("MODERATE_CONTENT_API_KEY")
         self.validate_profanity = validate_profanity
         self.whitelist = self._process_whitelist(whitelist)
 
         if validate_profanity and not self.moderate_content_api_key:
             raise ValueError(
-                "MODERATE_CONTENT_API_KEY key must set as an environment variable for validation.")
+                "MODERATE_CONTENT_API_KEY key must set as an environment variable for validation."
+            )
 
         if language is not None:
             self.set_language(language)
@@ -41,10 +47,10 @@ class SafeText:
     def _load_whitelist_from_file(self, filepath: str) -> set:
         """Load whitelist from text file (one word per line)."""
         try:
-            with open(filepath, encoding='utf-8') as f:
-                return set(line.strip().lower() for line in f if line.strip())
+            with open(filepath, encoding="utf-8") as f:
+                return {line.strip().lower() for line in f if line.strip()}
         except FileNotFoundError:
-            raise FileNotFoundError(f"Whitelist file not found: {filepath}")
+            raise FileNotFoundError(f"Whitelist file not found: {filepath}") from None
 
     def _process_whitelist(self, whitelist):
         if whitelist is None:
@@ -54,7 +60,7 @@ class SafeText:
             return self._load_whitelist_from_file(whitelist)
         elif isinstance(whitelist, list):
             # Ensure lowercase and strip whitespace
-            return set(word.strip().lower() for word in whitelist if word.strip())
+            return {word.strip().lower() for word in whitelist if word.strip()}
         else:
             raise ValueError("Whitelist must be a list of words or a file path")
 
@@ -216,10 +222,10 @@ class ProfanityChecker:
     def _find_profanities(self, text: str) -> List[Dict]:
         profanity_infos = []
         lower_text = text.lower()
-        words = re.findall(r'\b\w+\b', lower_text)
+        words = re.findall(r"\b\w+\b", lower_text)
 
         for profanity in self._profanity_words:
-            if ' ' in profanity:
+            if " " in profanity:
                 self._find_profanity_phrase(profanity, lower_text, profanity_infos)
             else:
                 self._find_profanity_word(profanity, words, text, profanity_infos)
@@ -244,14 +250,11 @@ class ProfanityChecker:
         """
         for i, word in enumerate(words):
             if word == profanity:
-                pattern = re.compile(r'\b' + re.escape(profanity) + r'\b', re.IGNORECASE)
+                pattern = re.compile(r"\b" + re.escape(profanity) + r"\b", re.IGNORECASE)
                 for match in pattern.finditer(text):
-                    profanity_infos.append({
-                        "word": word,
-                        "index": i + 1,
-                        "start": match.start(),
-                        "end": match.end()
-                    })
+                    profanity_infos.append(
+                        {"word": word, "index": i + 1, "start": match.start(), "end": match.end()}
+                    )
 
     def _find_profanity_phrase(self, profanity: str, lower_text: str, profanity_infos: List[Dict]):
         """
@@ -269,13 +272,10 @@ class ProfanityChecker:
         start = lower_text.find(profanity)
         while start != -1:
             end = start + len(profanity)
-            word_count_before = len(re.findall(r'\b\w+\b', lower_text[:start]))
-            profanity_infos.append({
-                "word": profanity,
-                "index": word_count_before + 1,
-                "start": start,
-                "end": end
-            })
+            word_count_before = len(re.findall(r"\b\w+\b", lower_text[:start]))
+            profanity_infos.append(
+                {"word": profanity, "index": word_count_before + 1, "start": start, "end": end}
+            )
             start = lower_text.find(profanity, end)
 
     def get_bad_words(self, text: str = None, profanity_results: Optional[List[Dict]] = None) -> List[str]:
@@ -314,10 +314,10 @@ class ProfanityChecker:
             str: The censored text with profanities replaced by asterisks.
         """
         detected_profanities = self.check(text)
-        for profanity in sorted(detected_profanities, key=lambda x: x['start'], reverse=True):
+        for profanity in sorted(detected_profanities, key=lambda x: x["start"], reverse=True):
             start_index = profanity["start"]
             end_index = profanity["end"]
-            text = text[:start_index] + '*' * (end_index - start_index) + text[end_index:]
+            text = text[:start_index] + "*" * (end_index - start_index) + text[end_index:]
         return text
 
     def check(self, text: str) -> List[Dict]:
@@ -354,7 +354,7 @@ class ModerateContentAPI:
                                      If not provided, it will look for an API key
                                      in the MODERATE_CONTENT_API_KEY environment variable.
         """
-        self.api_key = api_key or os.getenv('MODERATE_CONTENT_API_KEY')
+        self.api_key = api_key or os.getenv("MODERATE_CONTENT_API_KEY")
         if not self.api_key:
             raise ValueError("API key must be provided or set as an environment variable.")
 
@@ -371,7 +371,7 @@ class ModerateContentAPI:
             Dict: A dictionary containing the API response.
         """
         api_url = "https://api.moderatecontent.com/text/"
-        params = {'key': self.api_key, 'msg': text, 'exclude': exclude, 'replace': replace}
+        params = {"key": self.api_key, "msg": text, "exclude": exclude, "replace": replace}
         try:
             response = requests.get(api_url, params=params)
             response.raise_for_status()
@@ -380,10 +380,9 @@ class ModerateContentAPI:
             # Log the exception details here
             raise ConnectionError("Failed to connect to the Moderate Content API.") from e
 
-    def get_bad_words(self,
-                      text: str,
-                      exclude: Optional[str] = None,
-                      replace: Optional[str] = None) -> List[str]:
+    def get_bad_words(
+        self, text: str, exclude: Optional[str] = None, replace: Optional[str] = None
+    ) -> List[str]:
         """
         Analyzes the given text and returns a list of bad words found.
 
@@ -396,7 +395,7 @@ class ModerateContentAPI:
             List[str]: A list of bad words detected in the text.
         """
         response = self._request_api(text, exclude, replace)
-        return response.get('bad_words', [])
+        return response.get("bad_words", [])
 
     def censor(self, text: str, exclude: Optional[str] = None, replace: Optional[str] = None) -> str:
         """
@@ -411,7 +410,7 @@ class ModerateContentAPI:
             str: The censored text with bad words replaced by asterisks.
         """
         response = self._request_api(text, exclude, replace)
-        return response.get('clean', '')
+        return response.get("clean", "")
 
     def check(self, text: str):
         """
