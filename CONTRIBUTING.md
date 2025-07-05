@@ -20,6 +20,28 @@ we're thrilled to have you contribute to **safetext**! your efforts help enhance
 
 ## development setup 🛠️
 
+### using uv (recommended - fast!)
+
+```bash
+# install uv
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# clone and setup
+git clone https://github.com/viddexa/safetext.git
+cd safetext
+uv venv
+uv sync --dev
+
+# activate environment
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+
+# before committing
+ruff check --fix . && ruff format .
+pytest
+```
+
+### using pip (traditional)
+
 ```bash
 # clone and install
 git clone https://github.com/viddexa/safetext.git
