@@ -79,6 +79,26 @@ pip install safetext
 'tr'
 ```
 
+## 🌍 supported languages
+
+**safetext** currently supports profanity detection in 13 languages:
+
+| Language | ISO 639-1 Code | Language Name |
+|----------|----------------|---------------|
+| 🇸🇦 | `ar` | Arabic |
+| 🇦🇿 | `az` | Azerbaijani |
+| 🇩🇪 | `de` | German |
+| 🇬🇧 | `en` | English |
+| 🇪🇸 | `es` | Spanish |
+| 🇮🇷 | `fa` | Persian (Farsi) |
+| 🇫🇷 | `fr` | French |
+| 🇮🇳 | `hi` | Hindi |
+| 🇯🇵 | `ja` | Japanese |
+| 🇵🇹 | `pt` | Portuguese |
+| 🇷🇺 | `ru` | Russian |
+| 🇹🇷 | `tr` | Turkish |
+| 🇨🇳 | `zh` | Chinese |
+
 ## 📜 license
 
 **safetext** is proudly open-source, available under the [MIT License](LICENSE).
