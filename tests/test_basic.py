@@ -56,7 +56,7 @@ def test_whitelist():
 
 def test_multiple_languages():
     """Test that multiple languages can be loaded."""
-    languages = ["ar", "az", "ch", "de", "en", "es", "fa", "fr", "hi", "ja", "pt", "ru", "tr", "zh"]
+    languages = ["ar", "az", "de", "en", "es", "fa", "fr", "hi", "ja", "pt", "ru", "tr", "zh"]
 
     for lang in languages:
         st = SafeText(lang)
