@@ -29,14 +29,8 @@ jobs:
 
     - name: Lint with ruff
       id: ruff-check
-      shell: bash
       run: |
-        # Activate venv based on OS
-        if [[ "$RUNNER_OS" == "Windows" ]]; then
-          source .venv/Scripts/activate
-        else
-          source .venv/bin/activate
-        fi
+        source .venv/bin/activate
         
         echo "::group::Ruff Check"
         if ! ruff check .; then
@@ -55,23 +49,13 @@ jobs:
         echo "::endgroup::"
 
     - name: Run tests
-      shell: bash
       run: |
-        if [[ "$RUNNER_OS" == "Windows" ]]; then
-          source .venv/Scripts/activate
-        else
-          source .venv/bin/activate
-        fi
+        source .venv/bin/activate
         pytest -v --cov=safetext --cov-report=term-missing -n auto
 
     - name: Test package installation
-      shell: bash
       run: |
-        if [[ "$RUNNER_OS" == "Windows" ]]; then
-          source .venv/Scripts/activate
-        else
-          source .venv/bin/activate
-        fi
+        source .venv/bin/activate
         python -m build
         pip install --no-deps dist/*.whl
         python -c "from safetext import SafeText; st = SafeText('en'); print('Package imported successfully')"
