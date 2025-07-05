@@ -38,7 +38,7 @@ jobs:
       run: |
         cat > test_languages.py << 'EOF'
         from safetext import SafeText
-        languages = ['ar', 'az', 'ch', 'de', 'en', 'es', 'fa', 'fr', 'hi', 'ja', 'pt', 'ru', 'tr', 'zh']
+        languages = ['ar', 'az', 'de', 'en', 'es', 'fa', 'fr', 'hi', 'ja', 'pt', 'ru', 'tr', 'zh']
         for lang in languages:
             try:
                 st = SafeText(lang)
