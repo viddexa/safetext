@@ -34,7 +34,7 @@ uv venv --python 3.10  # or use your preferred Python version
 # activate environment
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
-uv sync --dev
+uv sync --extra dev 
 
 # before committing
 ruff check --fix . && ruff format .

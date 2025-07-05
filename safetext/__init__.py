@@ -41,7 +41,7 @@ class SafeText:
     def _load_whitelist_from_file(self, filepath: str) -> set:
         """Load whitelist from text file (one word per line)."""
         try:
-            with open(filepath, 'r', encoding='utf-8') as f:
+            with open(filepath, encoding='utf-8') as f:
                 return set(line.strip().lower() for line in f if line.strip())
         except FileNotFoundError:
             raise FileNotFoundError(f"Whitelist file not found: {filepath}")

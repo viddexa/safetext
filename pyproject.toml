@@ -111,7 +111,6 @@ ignore = [
     "E731", # do not assign a lambda expression, use a def
     "E402", # module level import not at top of file
     "E501", # line too long - let black handle this
-    "W504", # line break after binary operator
 ]
 
 [tool.ruff.format]

@@ -1,6 +1,7 @@
 """Basic tests for SafeText."""
 
 import pytest
+
 from safetext import SafeText
 
 
