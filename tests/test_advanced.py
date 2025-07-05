@@ -111,7 +111,8 @@ class TestEdgeCases:
         """Test detection of multiple profanities in text."""
         st = SafeText("en")
 
-        result = st.check_profanity("shit damn hell")
+        # Use words that are definitely in the profanity list
+        result = st.check_profanity("shit damn crap")
         assert len(result) >= 3  # Should detect all three
 
     def test_get_bad_words_method(self):
