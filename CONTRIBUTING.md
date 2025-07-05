@@ -30,10 +30,11 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 git clone https://github.com/viddexa/safetext.git
 cd safetext
 uv venv --python 3.10  # or use your preferred Python version
-uv sync --dev
 
 # activate environment
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+
+uv sync --dev
 
 # before committing
 ruff check --fix . && ruff format .
