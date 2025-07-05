@@ -121,6 +121,6 @@ class TestLanguageDetection:
         """Test that language can be changed after initialization."""
         st = SafeText("en")
         assert st.language == "en"
-        
+
         st.set_language("es")
         assert st.language == "es"
