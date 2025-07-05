@@ -15,14 +15,28 @@ we're thrilled to have you contribute to **safetext**! your efforts help enhance
 
 ### bug reports & suggestions 🐛
 
-- use the [discussions](https://github.com/safevideo/safetext/discussions) section for bug reports, feature requests and any questions.
+- use the [discussions](https://github.com/viddexa/safetext/discussions) section for bug reports, feature requests and any questions.
 - share your feedback or suggestions to help us improve.
+
+## development setup 🛠️
+
+```bash
+# clone and install
+git clone https://github.com/viddexa/safetext.git
+cd safetext
+pip install -e ".[dev]"
+
+# before committing
+ruff check --fix . && ruff format .
+pytest
+```
 
 ## pull request process 📝
 
 1. **fork the repo**: click 'Fork' on GitHub to copy the repository.
 1. **create a branch**: make a branch in your fork, e.g., `add-spanish`.
 1. **make changes**: update or add files.
+1. **format code**: run `ruff check --fix . && ruff format .`
 1. **commit**: commit your changes with a clear message.
 1. **push**: upload your changes to your Github fork.
 1. **open a PR**: go to the original `safetext` repository, click 'New Pull Request', pick your branch, then submit it with a clear description of your changes.
