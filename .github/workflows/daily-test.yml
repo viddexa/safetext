@@ -26,23 +26,36 @@ jobs:
       run: uv python install ${{ matrix.python-version }}
 
     - name: Test PyPI package installation
+      shell: bash
       run: |
-        uv venv test-env
-        source test-env/bin/activate
+        python -m venv test-env
+        if [[ "$RUNNER_OS" == "Windows" ]]; then
+          source test-env/Scripts/activate
+        else
+          source test-env/bin/activate
+        fi
         pip install safetext
         python -c "from safetext import SafeText; st = SafeText('en'); result = st.check_profanity('test shit'); print(f'Profanity detection working: {result}')"
-        deactivate
-        rm -rf test-env
 
     - name: Test development installation
+      shell: bash
       run: |
         uv sync --extra dev
-        source .venv/bin/activate
+        if [[ "$RUNNER_OS" == "Windows" ]]; then
+          source .venv/Scripts/activate
+        else
+          source .venv/bin/activate
+        fi
         pytest -v -n auto
 
     - name: Test all language support
+      shell: bash
       run: |
-        source .venv/bin/activate
+        if [[ "$RUNNER_OS" == "Windows" ]]; then
+          source .venv/Scripts/activate
+        else
+          source .venv/bin/activate
+        fi
         cat > test_languages.py << 'EOF'
         from safetext import SafeText
         languages = ['ar', 'az', 'de', 'en', 'es', 'fa', 'fr', 'hi', 'ja', 'pt', 'ru', 'tr', 'zh']
@@ -57,8 +70,13 @@ jobs:
         python test_languages.py
 
     - name: Check for dependency conflicts
+      shell: bash
       run: |
-        source .venv/bin/activate
+        if [[ "$RUNNER_OS" == "Windows" ]]; then
+          source .venv/Scripts/activate
+        else
+          source .venv/bin/activate
+        fi
         pip check
 
     - name: Report status

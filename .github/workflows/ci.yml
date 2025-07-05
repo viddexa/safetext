@@ -25,13 +25,19 @@ jobs:
       run: uv python install ${{ matrix.python-version }}
 
     - name: Install dependencies
-      run: |
-        uv sync --extra dev
+      run: uv sync --extra dev
 
     - name: Lint with ruff
       id: ruff-check
+      shell: bash
       run: |
-        source .venv/bin/activate
+        # Activate venv based on OS
+        if [[ "$RUNNER_OS" == "Windows" ]]; then
+          source .venv/Scripts/activate
+        else
+          source .venv/bin/activate
+        fi
+        
         echo "::group::Ruff Check"
         if ! ruff check .; then
           echo "::error::Ruff check failed. Please run 'ruff check --fix .' locally to fix issues."
@@ -49,13 +55,23 @@ jobs:
         echo "::endgroup::"
 
     - name: Run tests
+      shell: bash
       run: |
-        source .venv/bin/activate
+        if [[ "$RUNNER_OS" == "Windows" ]]; then
+          source .venv/Scripts/activate
+        else
+          source .venv/bin/activate
+        fi
         pytest -v --cov=safetext --cov-report=term-missing -n auto
 
     - name: Test package installation
+      shell: bash
       run: |
-        source .venv/bin/activate
+        if [[ "$RUNNER_OS" == "Windows" ]]; then
+          source .venv/Scripts/activate
+        else
+          source .venv/bin/activate
+        fi
         python -m build
         pip install --no-deps dist/*.whl
         python -c "from safetext import SafeText; st = SafeText('en'); print('Package imported successfully')"

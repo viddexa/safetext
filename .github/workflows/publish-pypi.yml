@@ -20,16 +20,25 @@ jobs:
       run: uv python install 3.12
       
     - name: Build package
+      shell: bash
       run: |
-        uv sync
-        source .venv/bin/activate
-        pip install build twine
+        uv sync --extra dev
+        if [[ "$RUNNER_OS" == "Windows" ]]; then
+          source .venv/Scripts/activate
+        else
+          source .venv/bin/activate
+        fi
         python -m build
         
     - name: Publish to PyPI
+      shell: bash
       env:
         TWINE_USERNAME: __token__
         TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
       run: |
-        source .venv/bin/activate
+        if [[ "$RUNNER_OS" == "Windows" ]]; then
+          source .venv/Scripts/activate
+        else
+          source .venv/bin/activate
+        fi
         twine upload --verbose --skip-existing dist/*

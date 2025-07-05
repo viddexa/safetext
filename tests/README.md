@@ -7,17 +7,25 @@ This directory contains the test suite for SafeText, organized for efficiency an
 ### Quick Start (using uv)
 
 ```bash
+# First time setup
+uv sync --extra dev
+
+# Activate virtual environment
+source .venv/bin/activate  # Unix/Linux/macOS
+# or
+.venv\Scripts\activate      # Windows
+
 # Run all tests in parallel
-uv run pytest -n auto
+pytest -n auto
 
 # Run only fast tests (skip slow/performance tests)
-uv run pytest -m "not slow"
+pytest -m "not slow"
 
 # Run specific test file
-uv run pytest tests/test_basic.py
+pytest tests/test_basic.py
 
 # Run with coverage
-uv run pytest --cov=safetext --cov-report=html
+pytest --cov=safetext --cov-report=html
 ```
 
 ### Test Organization
