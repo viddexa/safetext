@@ -9,7 +9,7 @@ authors = [{name = "Viddexa AI"}]
 description = "Fast profanity filtering tool for multiple languages"
 readme = "README.md"
 license = {file = "LICENSE"}
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 keywords = [
     "text", "profanity", "filtering", "moderation", 
     "turkish", "english", "spanish", "arabic", "hindi", "chinese",
