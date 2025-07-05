@@ -1,4 +1,3 @@
-import io
 import os
 import re
 
@@ -38,12 +37,12 @@ setuptools.setup(
     version=get_version(),
     author="",
     license="MIT",
-    description="Rule-based profanity checking tool for English and Turkish.",
+    description="Fast profanity filtering tool for English, Chinese, Spanish, Hindu and more.",
     long_description=get_long_description(),
     long_description_content_type="text/markdown",
     url="https://github.com/deepsafe/safetext",
     packages=setuptools.find_packages(exclude=["tests"]),
-    python_requires=">=3.7",
+    python_requires=">=3.8",
     install_requires=get_requirements(),
     extras_require=extras,
     include_package_data=True,
@@ -59,10 +58,5 @@ setuptools.setup(
         "Topic :: Scientific/Engineering",
         "Topic :: Scientific/Engineering :: Artificial Intelligence",
     ],
-    entry_points={
-        "console_scripts": [
-            "roboflow2huggingface=roboflow2huggingface.cli:app",
-        ],
-    },
-    keywords="text, profanity, filtering, turkish, english",
+    keywords="text, profanity, filtering, moderation, turkish, english, spanish, arabic, hindu, chinese",
 )

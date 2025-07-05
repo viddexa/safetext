@@ -1,7 +1,7 @@
 import logging
 import os
 import re
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Union
 
 import requests
 
@@ -15,7 +15,7 @@ class SafeText:
     optionally validating the results against the ModerateContentAPI.
     """
 
-    def __init__(self, language: str = "en", validate_profanity: bool = False):
+    def __init__(self, language: str = "en", validate_profanity: bool = False, whitelist: Optional[Union[List[str], str]] = None):
         """
         Initializes the SafeText with a specified language and validation option.
 
@@ -23,17 +23,40 @@ class SafeText:
             language (str): The language code for the profanity list. (ISO 639-1)
             validate_profanity (bool): Flag to enable validation of profanity detection results
                                        against ModerateContentAPI when using ProfanityChecker.
+            whitelist (Optional[List[str] | str]): List of words or path to whitelist file
         """
         self.language = language
         self.checker = None
-        if language is not None:
-            self.set_language(language)
         self.moderate_content_api_key = os.getenv('MODERATE_CONTENT_API_KEY')
         self.validate_profanity = validate_profanity
+        self.whitelist = self._process_whitelist(whitelist)
 
         if validate_profanity and not self.moderate_content_api_key:
             raise ValueError(
                 "MODERATE_CONTENT_API_KEY key must set as an environment variable for validation.")
+
+        if language is not None:
+            self.set_language(language)
+
+    def _load_whitelist_from_file(self, filepath: str) -> set:
+        """Load whitelist from text file (one word per line)."""
+        try:
+            with open(filepath, 'r', encoding='utf-8') as f:
+                return set(line.strip().lower() for line in f if line.strip())
+        except FileNotFoundError:
+            raise FileNotFoundError(f"Whitelist file not found: {filepath}")
+
+    def _process_whitelist(self, whitelist):
+        if whitelist is None:
+            return set()
+
+        if isinstance(whitelist, str):
+            return self._load_whitelist_from_file(whitelist)
+        elif isinstance(whitelist, list):
+            # Ensure lowercase and strip whitespace
+            return set(word.strip().lower() for word in whitelist if word.strip())
+        else:
+            raise ValueError("Whitelist must be a list of words or a file path")
 
     def set_language(self, language: str):
         """Sets the language of the profanity checker."""
@@ -42,7 +65,8 @@ class SafeText:
             raise ValueError(f"No profanity word list found for language '{language}'.")
 
         self.language = language
-        self.checker = ProfanityChecker(language)
+        # Pass whitelist to ProfanityChecker
+        self.checker = ProfanityChecker(language, whitelist=self.whitelist)
 
     def _get_words_filepath(self, language: str) -> str:
         return os.path.join(os.path.dirname(__file__), f"languages/{language}/words.txt")
@@ -168,16 +192,15 @@ class ProfanityChecker:
         language (str): The language code (e.g., 'en' for English).
     """
 
-    def __init__(self, language: str):
+    def __init__(self, language: str, whitelist: set = None):
         """
-        Initializes the ProfanityChecker with a specified language.
-
         Args:
             language (str): The language code for the profanity list.
+            whitelist (set): Set of words to exclude from profanity detection.
         """
         self.language = language
         self._profanity_words = self._load_profanity_list()
-        self._whitelist = self._load_whitelist()
+        self._whitelist = whitelist or set()
 
     def _load_profanity_list(self) -> List[str]:
         """
@@ -190,40 +213,9 @@ class ProfanityChecker:
         with open(words_filepath, encoding="utf8") as file:
             return file.read().splitlines()
 
-    def _load_whitelist(self) -> set:
-        """
-        Loads the whitelist of words for the current language.
-
-        Returns:
-            set: A set of words that are whitelisted.
-        """
-        whitelist_filepath = os.path.join(
-            os.path.dirname(__file__), f"languages/{self.language}/whitelist.txt")
-        try:
-            with open(whitelist_filepath, encoding="utf8") as file:
-                return set(file.read().splitlines())
-        except FileNotFoundError:
-            logging.warning(
-                f"Whitelist file not found for language '{self.language}'. Using an empty whitelist.")
-            return set()
-
     def _find_profanities(self, text: str) -> List[Dict]:
-        """
-        Finds profanities in the given text.
-
-        Args:
-            text (str): The text to scan for profanities.
-
-        Returns:
-            List[Dict]: A list of dictionaries, each containing information about a found profanity.
-        """
         profanity_infos = []
         lower_text = text.lower()
-
-        # Remove whitelisted words and phrases from the text
-        for white_item in self._whitelist:
-            lower_text = lower_text.replace(white_item.lower(), '')
-
         words = re.findall(r'\b\w+\b', lower_text)
 
         for profanity in self._profanity_words:
@@ -232,7 +224,13 @@ class ProfanityChecker:
             else:
                 self._find_profanity_word(profanity, words, text, profanity_infos)
 
-        return profanity_infos
+        # Filter out whitelisted items
+        filtered_infos = []
+        for info in profanity_infos:
+            if info["word"].lower() not in self._whitelist:
+                filtered_infos.append(info)
+
+        return filtered_infos
 
     def _find_profanity_word(self, profanity: str, words: List[str], text: str, profanity_infos: List[Dict]):
         """
@@ -264,6 +262,10 @@ class ProfanityChecker:
             lower_text (str): The lowercased text.
             profanity_infos (List[Dict]): List to append found profanities.
         """
+        # Skip if phrase is whitelisted
+        if profanity.lower() in self._whitelist:
+            return
+
         start = lower_text.find(profanity)
         while start != -1:
             end = start + len(profanity)
