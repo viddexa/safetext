@@ -111,14 +111,6 @@ exclude specific words from profanity detection:
 | 🇹🇷 | `tr` | Turkish |
 | 🇨🇳 | `zh` | Chinese |
 
-## 📜 license
-
-**safetext** is proudly open-source, available under the [MIT License](LICENSE).
-
-## 📞 contact
-
-for inquiries or support, reach out via [email](mailto:support@safevideo.ai) or visit our website [SafeVideo](https://safevideo.ai/).
-
 ## 🤝 contribute to safetext
 
 join our mission in refining content moderation!
@@ -147,23 +139,8 @@ ______________________________________________________________________
 
 <div align="center">
   <b>follow us for more!</b>
-  <br>
-  <a href="https://www.linkedin.com/company/safevideo/">
-      <img
-        src="https://user-images.githubusercontent.com/44926076/278822352-30e06f9b-1915-4aed-8081-6796432daa7a.png"
-        height="32px"
-      />
-  </a>
-  <a href="https://huggingface.co/safevideo">
-      <img
-        src="https://user-images.githubusercontent.com/34196005/278877706-ed074c9c-0938-48a1-98e8-39a322faf01d.png"
-        height="32px"
-      />
-  </a>
-  <a href="https://twitter.com/safevideo_ai">
-      <img
-        src="https://user-images.githubusercontent.com/34196005/278877049-141925a9-aa1b-4730-829e-74f6d08ee8ca.png"
-        height="32px"
-      />
-  </a>
+  <br><br>
+  <a href="https://www.linkedin.com/company/viddexa/">LinkedIn</a> • 
+  <a href="https://huggingface.co/viddexa">Hugging Face</a> • 
+  <a href="https://x.com/viddexa">X</a>
 </div>
