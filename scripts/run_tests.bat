@@ -50,7 +50,7 @@ echo Checking with ruff...
 ruff check .
 if errorlevel 1 (
     echo ❌ Ruff check failed! Run 'ruff check --fix .' to fix issues.
-    echo 📖 See contributing guidelines: https://github.com/safevideo/safetext/blob/main/CONTRIBUTING.md
+    echo 📖 See contributing guidelines: https://github.com/viddexa/safetext/blob/main/CONTRIBUTING.md
     exit /b 1
 )
 
@@ -58,7 +58,7 @@ echo Checking formatting...
 ruff format --check .
 if errorlevel 1 (
     echo ❌ Format check failed! Run 'ruff format .' to fix formatting.
-    echo 📖 See contributing guidelines: https://github.com/safevideo/safetext/blob/main/CONTRIBUTING.md
+    echo 📖 See contributing guidelines: https://github.com/viddexa/safetext/blob/main/CONTRIBUTING.md
     exit /b 1
 )
 

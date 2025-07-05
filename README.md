@@ -3,7 +3,7 @@
     <a align="center" href="" target="_blank">
       <img
         width="1280"
-        src="https://github.com/safevideo/safetext/assets/44926076/9af66dde-3a93-4c5b-b802-cb31dffcb2e5"
+        src="https://github.com/viddexa/safetext/assets/44926076/9af66dde-3a93-4c5b-b802-cb31dffcb2e5"
       >
     </a>
   </p>
@@ -130,8 +130,8 @@ ______________________________________________________________________
 meet our awesome contributors who make **safetext** better every day!
 
 <p align="center">
-    <a href="https://github.com/safevideo/safetext/graphs/contributors">
-      <img src="https://contrib.rocks/image?repo=safevideo/safetext" />
+    <a href="https://github.com/viddexa/safetext/graphs/contributors">
+      <img src="https://contrib.rocks/image?repo=viddexa/safetext" />
     </a>
 </p>
 

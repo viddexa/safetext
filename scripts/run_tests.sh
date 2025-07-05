@@ -68,14 +68,14 @@ case $MODE in
         echo "Checking with ruff..."
         if ! ruff check .; then
             echo "❌ Ruff check failed! Run 'ruff check --fix .' to fix issues."
-            echo "📖 See contributing guidelines: https://github.com/safevideo/safetext/blob/main/CONTRIBUTING.md"
+            echo "📖 See contributing guidelines: https://github.com/viddexa/safetext/blob/main/CONTRIBUTING.md"
             exit 1
         fi
         
         echo "Checking formatting..."
         if ! ruff format --check .; then
             echo "❌ Format check failed! Run 'ruff format .' to fix formatting."
-            echo "📖 See contributing guidelines: https://github.com/safevideo/safetext/blob/main/CONTRIBUTING.md"
+            echo "📖 See contributing guidelines: https://github.com/viddexa/safetext/blob/main/CONTRIBUTING.md"
             exit 1
         fi
         

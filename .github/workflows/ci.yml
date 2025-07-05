@@ -35,7 +35,7 @@ jobs:
         echo "::group::Ruff Check"
         if ! ruff check .; then
           echo "::error::Ruff check failed. Please run 'ruff check --fix .' locally to fix issues."
-          echo "::notice::See contributing guidelines at https://github.com/safevideo/safetext/blob/main/CONTRIBUTING.md"
+          echo "::notice::See contributing guidelines at https://github.com/viddexa/safetext/blob/main/CONTRIBUTING.md"
           exit 1
         fi
         echo "::endgroup::"
@@ -43,7 +43,7 @@ jobs:
         echo "::group::Ruff Format"
         if ! ruff format --check .; then
           echo "::error::Ruff format check failed. Please run 'ruff format .' locally to fix formatting."
-          echo "::notice::See contributing guidelines at https://github.com/safevideo/safetext/blob/main/CONTRIBUTING.md"
+          echo "::notice::See contributing guidelines at https://github.com/viddexa/safetext/blob/main/CONTRIBUTING.md"
           exit 1
         fi
         echo "::endgroup::"

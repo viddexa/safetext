@@ -24,7 +24,7 @@ we're thrilled to have you contribute to **safetext**! your efforts help enhance
 
 ```bash
 # quick setup
-git clone https://github.com/safevideo/safetext.git
+git clone https://github.com/viddexa/safetext.git
 cd safetext
 
 # Unix/Linux/macOS
@@ -70,7 +70,7 @@ ruff format .
 
 ```bash
 # clone and setup
-git clone https://github.com/safevideo/safetext.git
+git clone https://github.com/viddexa/safetext.git
 cd safetext
 
 # create virtual environment
