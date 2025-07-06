@@ -34,14 +34,14 @@ jobs:
         else
           source test-env/bin/activate
         fi
-
+        
         # Try installation with retries for network issues
         MAX_RETRIES=3
         RETRY_COUNT=0
-
+        
         while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
           echo "Installation attempt $((RETRY_COUNT + 1)) of $MAX_RETRIES"
-
+          
           if pip install safetext; then
             echo "Installation successful"
             break
@@ -56,7 +56,7 @@ jobs:
             fi
           fi
         done
-
+        
         python -c "from safetext import SafeText; st = SafeText('en'); result = st.check_profanity('test shit'); print(f'Profanity detection working: {result}')"
 
     - name: Test development installation
@@ -65,10 +65,10 @@ jobs:
         # Retry logic for uv sync
         MAX_RETRIES=3
         RETRY_COUNT=0
-
+        
         while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
           echo "Development installation attempt $((RETRY_COUNT + 1)) of $MAX_RETRIES"
-
+          
           if uv sync --extra dev; then
             echo "Development installation successful"
             break
@@ -83,7 +83,7 @@ jobs:
             fi
           fi
         done
-
+        
         if [[ "$RUNNER_OS" == "Windows" ]]; then
           source .venv/Scripts/activate
         else
@@ -105,9 +105,9 @@ jobs:
         for lang in languages:
             try:
                 st = SafeText(lang)
-                print(f'✓ {lang} loaded successfully')
+                print(f'[OK] {lang} loaded successfully')
             except Exception as e:
-                print(f'✗ {lang} failed: {e}')
+                print(f'[FAIL] {lang} failed: {e}')
                 exit(1)
         EOF
         python test_languages.py
