@@ -1,0 +1,51 @@
+{
+  "$schema": "https://context7.com/schema/context7.json",
+  "projectTitle": "SafeText",
+  "description": "Fast profanity filter and bad words detector for swear words, curse words, offensive language, inappropriate content and vulgar expressions in 13 languages with whitelist support",
+  "folders": [
+    "*.md",
+    "safetext/**",
+    "tests/**",
+    "scripts/**",
+  ],
+  "excludeFolders": [
+    "build",
+    "dist",
+    ".venv",
+    "__pycache__",
+    "*.egg-info",
+    ".pytest_cache",
+    "htmlcov",
+    ".tox"
+  ],
+  "excludeFiles": [
+    "setup.py",
+    ".gitignore",
+    ".env",
+    "*.pyc",
+    "*.pyo"
+  ],
+  "rules": [
+    "SafeText supports 13 languages: Arabic (ar), Azerbaijani (az), German (de), English (en), Spanish (es), Persian/Farsi (fa), French (fr), Hindi (hi), Japanese (ja), Portuguese (pt), Russian (ru), Turkish (tr), Chinese (zh)",
+    "Always initialize SafeText with a language code (ISO 639-1) or None for auto-detection",
+    "Use SafeText(language=None) and set_language_from_text() for automatic language detection",
+    "Use check_profanity() to get detailed profanity detection results with word positions",
+    "Example: st.check_profanity('bad text') returns [{'word': 'bad', 'index': 1, 'start': 0, 'end': 3}]",
+    "Use censor_profanity() to replace profanity with asterisks while preserving text length",
+    "Use whitelist parameter as a list of words or path to whitelist file to exclude specific words",
+    "Whitelist example with list: SafeText('en', whitelist=['damn', 'hell']) to allow these words",
+    "Whitelist example with file: SafeText('en', whitelist='allowed_words.txt') where file has one word per line",
+    "Whitelist example for phrases: SafeText('en', whitelist=['hot pocket', 'bloody mary']) to allow multi-word phrases",
+    "Whitelist is case-insensitive and supports both single words and phrases",
+    "Use get_bad_words() to get unique list of detected profanity without duplicates",
+    "For SRT subtitle files, use set_language_from_srt() for language detection",
+    "All profanity detection is case-insensitive by default",
+    "Use validate_profanity=True with MODERATE_CONTENT_API_KEY for API validation",
+    "Import as 'from safetext import SafeText' for main functionality",
+    "Profanity lists are stored in safetext/languages/{lang_code}/words.txt",
+    "Empty text returns empty results for check_profanity() and unchanged for censor_profanity()",
+    "Use pytest with -n auto for parallel test execution during development",
+    "Use uv for fast dependency management and development setup"
+  ],
+  "previousVersions": []
+}
