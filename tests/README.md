@@ -1,51 +1,62 @@
-# SafeText Tests
+# SafeText Tests 🧪
 
 This directory contains the test suite for SafeText, organized for efficiency and clarity.
 
-## Running Tests
+## 🚀 running tests
 
-### Quick Start (using uv)
+### quick start (using uv)
 
 ```bash
-# First time setup
+# first time setup
 uv sync --extra dev
 
-# Activate virtual environment
-source .venv/bin/activate  # Unix/Linux/macOS
+# activate virtual environment
+source .venv/bin/activate  # unix/linux/macos
 # or
-.venv\Scripts\activate      # Windows
+.venv\Scripts\activate      # windows
 
-# Run all tests in parallel
+# run all tests in parallel
 pytest -n auto
 
-# Run only fast tests (skip slow/performance tests)
+# run only fast tests (skip slow/performance tests)
 pytest -m "not slow"
 
-# Run specific test file
+# run specific test file
 pytest tests/test_basic.py
 
-# Run with coverage
+# run with coverage
 pytest --cov=safetext --cov-report=html
 ```
 
-### Test Organization
+💡 **tip**: Use the [convenient test scripts](../scripts/README.md) for easier test execution!
 
-- **`test_basic.py`**: Core functionality tests (initialization, detection, censoring)
-- **`test_advanced.py`**: Advanced features (whitelist files, edge cases, phrases)
-- **`test_performance.py`**: Performance and scaling tests (marked as `@pytest.mark.slow`)
-- **`conftest.py`**: Shared fixtures and test configuration
+## 📁 test organization
 
-### Test Features
+| file | description |
+|------|-------------|
+| **`test_basic.py`** | Core functionality tests (initialization, detection, censoring) |
+| **`test_advanced.py`** | Advanced features (whitelist files, edge cases, phrases) |
+| **`test_performance.py`** | Performance and scaling tests (marked as `@pytest.mark.slow`) |
+| **`conftest.py`** | Shared fixtures and test configuration |
 
-1. **Parallel Execution**: Tests run in parallel using `pytest-xdist` for faster execution
-2. **DRY Principle**: Common test data and fixtures are shared via `conftest.py`
-3. **Parametrized Tests**: Extensive use of `@pytest.mark.parametrize` to test multiple scenarios efficiently
-4. **Performance Tests**: Separate slow tests that can be skipped during quick test runs
+## ✨ test features
 
-### Tips
+1. **parallel execution**: Tests run in parallel using `pytest-xdist` for faster execution
+2. **dry principle**: Common test data and fixtures are shared via `conftest.py`
+3. **parametrized tests**: Extensive use of `@pytest.mark.parametrize` to test multiple scenarios efficiently
+4. **performance tests**: Separate slow tests that can be skipped during quick test runs
 
-- Use `-n auto` to run tests in parallel (automatically detects CPU cores)
-- Use `-m "not slow"` to skip performance tests during development
-- Use `-v` for verbose output when debugging test failures
-- Use `--lf` to run only the last failed tests
-- Use `-k "test_name"` to run specific tests by name pattern
+## 💡 tips
+
+| command | description |
+|---------|-------------|
+| `-n auto` | Run tests in parallel (automatically detects CPU cores) |
+| `-m "not slow"` | Skip performance tests during development |
+| `-v` | Verbose output when debugging test failures |
+| `--lf` | Run only the last failed tests |
+| `-k "test_name"` | Run specific tests by name pattern |
+
+## 📚 see also
+
+- [development scripts](../scripts/README.md) - convenient test runners
+- [contributing guide](../CONTRIBUTING.md) - complete development workflow

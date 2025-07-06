@@ -32,6 +32,8 @@ easily install **safetext** with pip:
 pip install safetext
 ```
 
+for development setup, see our [scripts documentation](scripts/README.md).
+
 ## 🎯 quickstart
 
 ### check and censor profanity
@@ -122,7 +124,7 @@ contribute by:
 - **enhancing word lists**: improve detection accuracy.
 - **sharing feedback**: your ideas can shape `safetext`.
 
-see our [contributing guidelines](CONTRIBUTING.md) for more.
+see our [contributing guidelines](CONTRIBUTING.md) for development workflow, [test documentation](tests/README.md) for running tests, and [scripts guide](scripts/README.md) for automation tools.
 
 ______________________________________________________________________
 
