@@ -34,13 +34,56 @@ jobs:
         else
           source test-env/bin/activate
         fi
-        pip install safetext
+
+        # Try installation with retries for network issues
+        MAX_RETRIES=3
+        RETRY_COUNT=0
+
+        while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+          echo "Installation attempt $((RETRY_COUNT + 1)) of $MAX_RETRIES"
+
+          if pip install safetext; then
+            echo "Installation successful"
+            break
+          else
+            RETRY_COUNT=$((RETRY_COUNT + 1))
+            if [ $RETRY_COUNT -lt $MAX_RETRIES ]; then
+              echo "Installation failed, retrying in 10 seconds..."
+              sleep 10
+            else
+              echo "Installation failed after $MAX_RETRIES attempts"
+              exit 1
+            fi
+          fi
+        done
+
         python -c "from safetext import SafeText; st = SafeText('en'); result = st.check_profanity('test shit'); print(f'Profanity detection working: {result}')"
 
     - name: Test development installation
       shell: bash
       run: |
-        uv sync --extra dev
+        # Retry logic for uv sync
+        MAX_RETRIES=3
+        RETRY_COUNT=0
+
+        while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+          echo "Development installation attempt $((RETRY_COUNT + 1)) of $MAX_RETRIES"
+
+          if uv sync --extra dev; then
+            echo "Development installation successful"
+            break
+          else
+            RETRY_COUNT=$((RETRY_COUNT + 1))
+            if [ $RETRY_COUNT -lt $MAX_RETRIES ]; then
+              echo "Development installation failed, retrying in 10 seconds..."
+              sleep 10
+            else
+              echo "Development installation failed after $MAX_RETRIES attempts"
+              exit 1
+            fi
+          fi
+        done
+
         if [[ "$RUNNER_OS" == "Windows" ]]; then
           source .venv/Scripts/activate
         else
@@ -78,18 +121,3 @@ jobs:
           source .venv/bin/activate
         fi
         pip check
-
-    - name: Report status
-      if: failure()
-      uses: actions/github-script@v7
-      with:
-        script: |
-          const os = '${{ matrix.os }}';
-          const python = '${{ matrix.python-version }}';
-          github.rest.issues.create({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            title: `Daily test failed on ${os} Python ${python}`,
-            body: `The daily package test failed. Please check the [workflow run](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}).`,
-            labels: ['ci-failure', 'automated']
-          })
