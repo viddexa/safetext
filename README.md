@@ -8,6 +8,8 @@
     </a>
   </p>
 
+[![Context7 MCP](https://img.shields.io/badge/Context7%20MCP-Indexed-blue)](https://context7.com/viddexa/safetext)
+[![llms.txt](https://img.shields.io/badge/llms.txt-✓-brightgreen)](https://context7.com/viddexa/safetext/llms.txt)
 [![version](https://badge.fury.io/py/safetext.svg)](https://badge.fury.io/py/safetext)
 [![downloads](https://pepy.tech/badge/safetext)](https://pepy.tech/project/safetext)
 [![license](https://img.shields.io/pypi/l/safetext)](LICENSE)
