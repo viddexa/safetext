@@ -6,7 +6,7 @@
     "*.md",
     "safetext/**",
     "tests/**",
-    "scripts/**",
+    "scripts/**"
   ],
   "excludeFolders": [
     "build",
