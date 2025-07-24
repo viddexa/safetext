@@ -67,6 +67,7 @@ azdım
 azdır
 azdırıcı
 bitch
+bok
 boner
 bosalmak
 boşalmak
@@ -153,6 +154,7 @@ götün
 götüne
 götünekoyim
 götünü
+götünüzü
 hasiktir
 hassikome
 hassiktir
@@ -288,6 +290,11 @@ saksocuyu
 saxo
 serefsiz
 sevişelim
+sevişmek
+sevişmemeniz
+seviştiniz
+sıçarlar
+sıçarsın
 sicarsin
 sik
 sikdi
