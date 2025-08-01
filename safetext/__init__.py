@@ -7,7 +7,7 @@ import requests
 
 from safetext.utils import detect_language_from_srt, detect_language_from_text
 
-__version__ = "0.2.1"
+__version__ = "0.2.2"
 
 
 class SafeText:
@@ -17,7 +17,7 @@ class SafeText:
 
     def __init__(
         self,
-        language: str = "en",
+        language: str = None,
         validate_profanity: bool = False,
         whitelist: Optional[Union[List[str], str]] = None,
     ):
@@ -25,7 +25,8 @@ class SafeText:
         Initializes the SafeText with a specified language and validation option.
 
         Args:
-            language (str): The language code for the profanity list. (ISO 639-1)
+            language (str): The language code for the profanity list. (ISO 639-1). Keep it None
+                            to perform automated language detection.
             validate_profanity (bool): Flag to enable validation of profanity detection results
                                        against ModerateContentAPI when using ProfanityChecker.
             whitelist (Optional[List[str] | str]): List of words or path to whitelist file
