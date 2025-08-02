@@ -7,7 +7,7 @@ import requests
 
 from safetext.utils import detect_language_from_srt, detect_language_from_text
 
-__version__ = "0.2.2"
+__version__ = "0.3.0"
 
 
 class SafeText:
@@ -20,6 +20,7 @@ class SafeText:
         language: str = None,
         validate_profanity: bool = False,
         whitelist: Optional[Union[List[str], str]] = None,
+        custom_words_dir: Optional[str] = None,
     ):
         """
         Initializes the SafeText with a specified language and validation option.
@@ -30,12 +31,15 @@ class SafeText:
             validate_profanity (bool): Flag to enable validation of profanity detection results
                                        against ModerateContentAPI when using ProfanityChecker.
             whitelist (Optional[List[str] | str]): List of words or path to whitelist file
+            custom_words_dir (Optional[str]): Directory containing custom profanity word files 
+                                             (e.g., en.txt, tr.txt)
         """
         self.language = language
         self.checker = None
         self.moderate_content_api_key = os.getenv("MODERATE_CONTENT_API_KEY")
         self.validate_profanity = validate_profanity
         self.whitelist = self._process_whitelist(whitelist)
+        self.custom_words_dir = custom_words_dir
 
         if validate_profanity and not self.moderate_content_api_key:
             raise ValueError(
@@ -72,8 +76,8 @@ class SafeText:
             raise ValueError(f"No profanity word list found for language '{language}'.")
 
         self.language = language
-        # Pass whitelist to ProfanityChecker
-        self.checker = ProfanityChecker(language, whitelist=self.whitelist)
+        # Pass both whitelist and custom_words_dir to ProfanityChecker
+        self.checker = ProfanityChecker(language, whitelist=self.whitelist, custom_words_dir=self.custom_words_dir)
 
     def _get_words_filepath(self, language: str) -> str:
         return os.path.join(os.path.dirname(__file__), f"languages/{language}/words.txt")
@@ -199,26 +203,39 @@ class ProfanityChecker:
         language (str): The language code (e.g., 'en' for English).
     """
 
-    def __init__(self, language: str, whitelist: set = None):
+    def __init__(self, language: str, whitelist: set = None, custom_words_dir: Optional[str] = None):
         """
         Args:
             language (str): The language code for the profanity list.
             whitelist (set): Set of words to exclude from profanity detection.
+            custom_words_dir (Optional[str]): Directory containing custom profanity word files.
         """
         self.language = language
+        self.custom_words_dir = custom_words_dir
         self._profanity_words = self._load_profanity_list()
         self._whitelist = whitelist or set()
 
     def _load_profanity_list(self) -> List[str]:
         """
-        Loads the profanity words list from the corresponding file.
+        Loads the profanity words list from the built-in file and custom directory.
 
         Returns:
             List[str]: A list of profanity words and phrases.
         """
+        # Load built-in words
         words_filepath = os.path.join(os.path.dirname(__file__), f"languages/{self.language}/words.txt")
         with open(words_filepath, encoding="utf8") as file:
-            return file.read().splitlines()
+            words = file.read().splitlines()
+
+        # Load custom words if directory is provided
+        if self.custom_words_dir:
+            custom_file = os.path.join(self.custom_words_dir, f"{self.language}.txt")
+            if os.path.exists(custom_file):
+                with open(custom_file, encoding="utf8") as file:
+                    custom_words = file.read().splitlines()
+                    words.extend(custom_words)
+
+        return words
 
     def _find_profanities(self, text: str) -> List[Dict]:
         profanity_infos = []
