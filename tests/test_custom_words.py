@@ -101,7 +101,7 @@ class TestCustomWordsDirectory:
             # Create custom files for multiple languages
             with open(os.path.join(temp_dir, "en.txt"), "w", encoding="utf-8") as f:
                 f.write("englishcustom\n")
-            
+
             with open(os.path.join(temp_dir, "tr.txt"), "w", encoding="utf-8") as f:
                 f.write("turkishcustom\n")
 

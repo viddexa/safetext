@@ -31,7 +31,7 @@ class SafeText:
             validate_profanity (bool): Flag to enable validation of profanity detection results
                                        against ModerateContentAPI when using ProfanityChecker.
             whitelist (Optional[List[str] | str]): List of words or path to whitelist file
-            custom_words_dir (Optional[str]): Directory containing custom profanity word files 
+            custom_words_dir (Optional[str]): Directory containing custom profanity word files
                                              (e.g., en.txt, tr.txt)
         """
         self.language = language
@@ -77,7 +77,9 @@ class SafeText:
 
         self.language = language
         # Pass both whitelist and custom_words_dir to ProfanityChecker
-        self.checker = ProfanityChecker(language, whitelist=self.whitelist, custom_words_dir=self.custom_words_dir)
+        self.checker = ProfanityChecker(
+            language, whitelist=self.whitelist, custom_words_dir=self.custom_words_dir
+        )
 
     def _get_words_filepath(self, language: str) -> str:
         return os.path.join(os.path.dirname(__file__), f"languages/{language}/words.txt")
