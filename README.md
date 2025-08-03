@@ -137,7 +137,7 @@ exclude specific words from profanity detection:
 **safetext** currently supports profanity detection in 13 languages:
 
 | Language | ISO 639-1 Code | Language Name |
-|----------|----------------|---------∂------|
+|----------|----------------|---------------|
 | 🇸🇦 | `ar` | Arabic |
 | 🇦🇿 | `az` | Azerbaijani |
 | 🇩🇪 | `de` | German |
