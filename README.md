@@ -21,6 +21,7 @@
 **Fast profanity detection and filtering for 13 languages.**
 
 - **Multi-format Detection**: Single words, phrases, and contextual profanity
+- **Custom Word Lists**: Extend built-in lists with your own profanity words
 - **Whitelisting**: Exclude specific words from detection
 - **Auto Language Detection**: From text or subtitle files
 - **Precise Filtering**: Exact position tracking and custom censoring
@@ -47,11 +48,39 @@ for development setup, see our [scripts documentation](scripts/README.md).
 
 >>> results = st.check_profanity(text='Some text with <profanity-word>.')
 >>> results
-{'word': '<profanity-word>', 'index': 4, 'start': 15, 'end': 31}
+[{'word': '<profanity-word>', 'index': 4, 'start': 15, 'end': 31}]
 
 >>> text = st.censor_profanity(text='Some text with <profanity-word>.')
 >>> text
 "Some text with ***."
+```
+
+### extending profanity lists with custom words
+
+Add your own profanity words by providing a custom words directory:
+
+```python
+# Directory structure:
+# custom_profanity_words/
+# ├── en.txt              # English custom words
+# ├── tr.txt              # Turkish custom words
+# └── es.txt              # Spanish custom words
+
+>>> st = SafeText(language='en', custom_words_dir='custom_profanity_words')
+
+>>> # Custom words from en.txt are now included
+>>> results = st.check_profanity('This mycustomword is inappropriate')
+>>> results
+[{'word': 'mycustomword', 'index': 2, 'start': 5, 'end': 17}]
+```
+
+Custom word files should contain one word/phrase per line:
+
+```
+# custom_profanity_words/en.txt
+mycustomword
+inappropriate phrase
+company specific term
 ```
 
 ### using whitelist
@@ -64,6 +93,13 @@ exclude specific words from profanity detection:
 
 # Using a file (one word per line)
 >>> st = SafeText(language='en', whitelist='path/to/whitelist.txt')
+
+# Combining custom words with whitelist
+>>> st = SafeText(
+...     language='en', 
+...     custom_words_dir='custom_profanity_words',
+...     whitelist=['allowedcustomword']
+... )
 ```
 
 ### automated language detection
