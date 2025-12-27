@@ -129,6 +129,8 @@ class SafeText:
                 - start: The start index of the profanity word in the text.
                 - end: The end index of the profanity word in the text.
         """
+        if self.checker is None:
+            self._auto_set_language(text)
         checker_results = self.checker.check(text)
         if self.validate_profanity:
             checker_bad_words = [profanity["word"] for profanity in checker_results]
